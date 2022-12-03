@@ -20,20 +20,36 @@ export const groupCalories = (input: string[]) => {
   return elves;
 };
 
-export const mostCaloriesHeld = (input: number[]) => {
-  let caloriesHeld = 0;
+export const sortCaloriesHeld = (input: number[]) =>
+  input.map((number) => number).sort((a, b) => b - a);
 
-  for (const calories of input) {
-    if (calories > caloriesHeld) {
-      caloriesHeld = calories;
-    }
+export const topNCaloriesHeld = (top: number, input: number[]) => {
+  const result: number[] = [];
+  const sorted = sortCaloriesHeld(input);
+  for (let current = 0; current < top; current++) {
+    result[current] = sorted[current];
   }
 
-  return caloriesHeld;
+  return result;
 };
 
-export const solve = async (filePath: string) => {
+export const solvePart1 = async (filePath: string) => {
   const data = await readToArray(filePath, (line) => line);
 
-  return mostCaloriesHeld(groupCalories(data));
+  return topNCaloriesHeld(1, groupCalories(data))[0];
+};
+
+export const sum = (input: number[]) => {
+  let aggregate = 0;
+  for (const number of input) {
+    aggregate += number;
+  }
+
+  return aggregate;
+};
+
+export const solvePart2 = async (top: number, filePath: string) => {
+  const data = await readToArray(filePath, (line) => line);
+
+  return sum(topNCaloriesHeld(top, groupCalories(data)));
 };
